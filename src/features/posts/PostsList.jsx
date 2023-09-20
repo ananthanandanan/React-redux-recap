@@ -18,7 +18,6 @@ function PostsList() {
 
   useEffect(() => {
     if (postStatus === "idle") {
-      console.log("Fetching Posts");
       dispatch(fetchPosts());
     }
   }, [postStatus, dispatch]);
@@ -27,7 +26,6 @@ function PostsList() {
   if (postStatus === "loading") {
     content = <p>"Loading..."</p>;
   } else if (postStatus === "succeeded") {
-    console.log("PostsList", posts);
     const orderedPosts = posts
       .slice()
       .sort((a, b) => b.date.localeCompare(a.date));

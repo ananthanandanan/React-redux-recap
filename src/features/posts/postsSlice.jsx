@@ -80,7 +80,6 @@ const postsSlice = createSlice({
         });
 
         // Add any fetched posts to the array
-        console.log("Loaded Posts", loadedPosts);
         state.posts = state.posts.concat(loadedPosts);
       })
       .addCase(fetchPosts.rejected, (state, action) => {
