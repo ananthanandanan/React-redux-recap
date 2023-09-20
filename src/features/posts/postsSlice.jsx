@@ -67,20 +67,17 @@ const postsSlice = createSlice({
         state.status = "succeeded";
         // Adding date and reactions
         let min = 1;
-        const loadedPosts = action.payload.map((post) => {
-          post.date = sub(new Date(), { minutes: min++ }).toISOString();
-          post.reactions = {
+        state.posts = action.payload.map((post) => ({
+          ...post,
+          date: sub(new Date(), { minutes: min++ }).toISOString(),
+          reactions: {
             thumbsUp: 0,
             wow: 0,
             heart: 0,
             rocket: 0,
             coffee: 0,
-          };
-          return post;
-        });
-
-        // Add any fetched posts to the array
-        state.posts = state.posts.concat(loadedPosts);
+          },
+        }));
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = "failed";
