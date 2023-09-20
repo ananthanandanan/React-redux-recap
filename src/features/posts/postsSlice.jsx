@@ -9,12 +9,26 @@ const initialState = [
     title: "First Post!",
     content: "Hello!",
     date: sub(new Date(), { minutes: 10 }).toISOString(),
+    reactions: {
+      thumbsUp: 0,
+      hooray: 0,
+      heart: 0,
+      rocket: 0,
+      eyes: 0,
+    },
   },
   {
     id: "2",
     title: "Second Post",
     content: "More text",
     date: sub(new Date(), { minutes: 5 }).toISOString(),
+    reactions: {
+      thumbsUp: 0,
+      hooray: 0,
+      heart: 0,
+      rocket: 0,
+      eyes: 0,
+    },
   },
 ];
 
@@ -38,15 +52,32 @@ const postsSlice = createSlice({
             content,
             date: new Date().toISOString(),
             userId,
+            reactions: {
+              thumbsUp: 0,
+              hooray: 0,
+              heart: 0,
+              rocket: 0,
+              eyes: 0,
+            },
           },
         };
       },
+    },
+
+    // reactions added
+    reactionAdded(state, action) {
+      const { postId, reaction } = action.payload;
+      const existingPost = state.find((post) => post.id === postId);
+
+      if (existingPost) {
+        existingPost.reactions[reaction]++;
+      }
     },
   },
 });
 
 // The posts actions
-export const { postAdded } = postsSlice.actions;
+export const { postAdded, reactionAdded } = postsSlice.actions;
 // The posts selector
 export const selectAllPosts = (state) => state.posts;
 // The posts reducer
