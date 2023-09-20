@@ -11,34 +11,31 @@ import PostsExcerpt from "./PostsExcerpt";
 
 function PostsList() {
   const dispatch = useDispatch();
+
   const posts = useSelector(selectAllPosts);
-  const postsStatus = useSelector(getPostsStatus);
-  const postsError = useSelector(getPostsError);
+  const postStatus = useSelector(getPostsStatus);
+  const error = useSelector(getPostsError);
 
   useEffect(() => {
-    if (postsStatus === "idle") {
+    if (postStatus === "idle") {
+      console.log("Fetching Posts");
       dispatch(fetchPosts());
     }
-  }, [dispatch, postsStatus]);
-
-  // Sort posts in reverse chronological order by datetime string
-  // localeCompare() compares two strings and returns -1 if the first string
-  // comes before the second string in sort order, 1 if it comes after the second
-  // string in sort order, and 0 if they are equivalent.
-  // slice() returns a copy of the array (posts) so that we don't mutate the original
+  }, [postStatus, dispatch]);
 
   let content;
-  if (postsStatus === "loading") {
+  if (postStatus === "loading") {
     content = <p>"Loading..."</p>;
-  } else if (postsStatus === "succeeded") {
+  } else if (postStatus === "succeeded") {
+    console.log("PostsList", posts);
     const orderedPosts = posts
       .slice()
       .sort((a, b) => b.date.localeCompare(a.date));
     content = orderedPosts.map((post) => (
       <PostsExcerpt key={post.id} post={post} />
     ));
-  } else if (postsStatus === "failed") {
-    content = <p>{postsError}</p>;
+  } else if (postStatus === "failed") {
+    content = <p>{error}</p>;
   }
 
   return (
